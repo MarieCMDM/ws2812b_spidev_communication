@@ -7,12 +7,15 @@ if (args.length == 5){
 }else{
   rgb = [0, 0, 0]
 }
+
 const spiPort = spi.open(0, 0, err => {
   // An SPI message is an array of one or more read+write transfers
   const message = [{
-    sendBuffer: Buffer.from(messageParser(rgb)),
+    //sendBuffer: Buffer.from(messageParser(rgb)), // use this if more leds are used
+    sendBuffer: Buffer.from(colorParser(rgb)), // use this to speedup if only one led is used
     byteLength: 24 * LED_NUM,
-    speedHz: 8000000 
+    speedHz: 8000000, 
+    microSecondsDelay: 0
   }];
 
   spiPort.transfer(message, (err, message) => {
@@ -60,4 +63,3 @@ function colorParser(rgb){
   }
   return color_data;
 };
-
